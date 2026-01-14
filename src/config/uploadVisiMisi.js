@@ -13,8 +13,8 @@ module.exports = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_, file, cb) => {
     if (!file.mimetype.includes("pdf")) {
-      cb(new Error("Only PDF allowed"));
+      return cb(new Error("Only PDF allowed"));
     }
-    cb(null, true);
+    cb(null, `visi-misi_${Date.now()}.pdf`);
   },
 });

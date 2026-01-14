@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   const allowed = ["image/jpeg", "image/png", "image/webp"];
   if (!allowed.includes(file.mimetype)) {
-    cb(new Error("Format file tidak didukung"), false);
+    return cb(new Error("Format file tidak didukung"), false);
   }
   cb(null, true);
 };

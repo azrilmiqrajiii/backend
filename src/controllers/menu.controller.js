@@ -30,7 +30,7 @@ exports.createMenu = async (req, res) => {
     const menu = await Menu.create({
       title,
       order: order || 0,
-      image: `${process.env.BASE_URL}/uploads/menus/${req.file.filename}`,
+      image: `/uploads/menus/${req.file.filename}`,
     });
 
     res.status(201).json(menu);

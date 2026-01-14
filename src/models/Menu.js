@@ -11,10 +11,7 @@ const menuSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    order: {
-      type: Number,
-      default: 0,
-    },
+    order: { type: Number, default: 0, index: true },
   },
   { timestamps: true }
 );
