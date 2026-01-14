@@ -20,10 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-app.use("/uploads", express.static("uploads"));
 app.use("/api/visi-misi", require("./routes/visiMisi.routes"));
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.get("/", (req, res) => {
   res.send("SPM Backend OK");
