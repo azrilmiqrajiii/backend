@@ -2,8 +2,18 @@ const Menu = require("../models/Menu");
 
 exports.getMenus = async (req, res) => {
   try {
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.get("host");
+    const baseUrl = `${protocol}://${host}`;
+
     const menus = await Menu.find().sort({ order: 1 });
-    res.json(menus);
+
+    const fixedMenus = menus.map((menu) => ({
+      ...menu.toObject(),
+      image: menu.image ? `${baseUrl}${menu.image}` : null,
+    }));
+
+    res.json(fixedMenus);
   } catch (err) {
     res.status(500).json({ message: "Gagal mengambil menu" });
   }
