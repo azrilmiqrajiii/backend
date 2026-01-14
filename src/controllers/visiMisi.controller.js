@@ -3,7 +3,17 @@ const VisiMisi = require("../models/VisiMisi");
 exports.get = async (req, res) => {
   const { prodi, tahun } = req.params;
   const data = await VisiMisi.findOne({ prodi, tahun });
-  res.json(data);
+
+  if (!data) return res.json(null);
+
+  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  const host = req.get("host");
+  const baseUrl = `${protocol}://${host}`;
+
+  res.json({
+    ...data.toObject(),
+    file: data.file ? `${baseUrl}${data.file}` : null,
+  });
 };
 
 exports.save = async (req, res) => {
