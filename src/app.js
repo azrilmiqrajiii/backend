@@ -33,4 +33,7 @@ app.use("/api/auth", authRoutes);
 const menuRoutes = require("./routes/menu.routes");
 app.use("/api/menus", menuRoutes);
 
+const kurikulumRoutes = require("./routes/kurikulum.routes");
+app.use("/api/kurikulum", kurikulumRoutes);
+
 module.exports = app;
