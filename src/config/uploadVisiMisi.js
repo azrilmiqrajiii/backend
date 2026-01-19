@@ -1,5 +1,4 @@
 const multer = require("multer");
-const path = require("path");
 
 const storage = multer.diskStorage({
   destination: "uploads/visi-misi",
@@ -13,8 +12,8 @@ module.exports = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_, file, cb) => {
     if (!file.mimetype.includes("pdf")) {
-      return cb(new Error("Only PDF allowed"));
+      return cb(new Error("File harus PDF"));
     }
-    cb(null, `visi-misi_${Date.now()}.pdf`);
+    cb(null, true);
   },
 });

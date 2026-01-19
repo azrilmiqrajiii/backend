@@ -17,19 +17,29 @@ exports.get = async (req, res) => {
 };
 
 exports.save = async (req, res) => {
-  const { prodi } = req.params;
-  const { visi, misi, tahun } = req.body;
+  try {
+    const { prodi } = req.params;
+    const { visi, misi, tahun } = req.body;
 
-  const payload = { prodi, tahun, visi, misi };
+    if (!visi || !misi || !tahun) {
+      return res.status(400).json({ message: "Visi, misi, dan tahun wajib" });
+    }
 
-  if (req.file) payload.file = `/uploads/visi-misi/${req.file.filename}`;
+    const payload = { prodi, tahun, visi, misi };
 
-  const data = await VisiMisi.findOneAndUpdate({ prodi, tahun }, payload, {
-    upsert: true,
-    new: true,
-  });
+    if (req.file) {
+      payload.file = `/uploads/visi-misi/${req.file.filename}`;
+    }
 
-  res.json(data);
+    const data = await VisiMisi.findOneAndUpdate({ prodi, tahun }, payload, {
+      upsert: true,
+      new: true,
+    });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.remove = async (req, res) => {

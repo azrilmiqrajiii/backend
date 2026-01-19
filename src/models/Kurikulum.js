@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
 
 const matkulSchema = new mongoose.Schema({
-  semester: String,
-  kodeMataKuliah: String,
-  namaMataKuliah: String,
-  sksKuliah: String,
-  sksSeminar: String,
-  sksPraktikum: String,
+  semester: Number,
+  kode: String,
+  nama: String,
+  sksKuliah: Number,
+  sksSeminar: Number,
+  sksPraktikum: Number,
   rps: String,
 });
 
 const kurikulumSchema = new mongoose.Schema(
   {
-    prodi: { type: String, required: true },
-    tahun: { type: String, required: true },
+    prodi: String,
+    tahun: Number,
     matkul: [matkulSchema],
-    file: String,
+    pdf: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 kurikulumSchema.index({ prodi: 1, tahun: 1 }, { unique: true });

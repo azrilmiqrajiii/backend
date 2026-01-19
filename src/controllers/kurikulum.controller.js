@@ -3,34 +3,27 @@ const Kurikulum = require("../models/Kurikulum");
 exports.get = async (req, res) => {
   const { prodi, tahun } = req.params;
   const data = await Kurikulum.findOne({ prodi, tahun });
-  res.json(data);
+  res.json(data || null);
 };
 
 exports.save = async (req, res) => {
-  try {
-    const { prodi } = req.params;
+  const { prodi } = req.params;
+  const { tahun, matkul } = req.body;
 
-    const tahun = req.body.tahun;
-    const matkulRaw = req.body.matkul || "[]";
+  const payload = {
+    prodi,
+    tahun: Number(tahun),
+    matkul: JSON.parse(matkul),
+  };
 
-    const payload = {
-      prodi,
-      tahun,
-      matkul: JSON.parse(matkulRaw),
-    };
+  if (req.files?.pdf)
+    payload.pdf = `/uploads/kurikulum/${req.files.pdf[0].filename}`;
 
-    if (req.file) {
-      payload.file = `/uploads/kurikulum/${req.file.filename}`;
-    }
+  const data = await Kurikulum.findOneAndUpdate(
+    { prodi, tahun: payload.tahun },
+    payload,
+    { upsert: true, new: true },
+  );
 
-    const data = await Kurikulum.findOneAndUpdate({ prodi, tahun }, payload, {
-      upsert: true,
-      new: true,
-    });
-
-    res.json(data);
-  } catch (err) {
-    console.error("KURIKULUM SAVE ERROR:", err);
-    res.status(500).json({ message: "Gagal menyimpan kurikulum" });
-  }
+  res.json(data);
 };
