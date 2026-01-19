@@ -13,4 +13,6 @@ router.post(
   c.save,
 );
 
+router.post("/:prodi/rps/:index", auth, uploadRPS.single("rps"), c.uploadRps);
+
 module.exports = router;

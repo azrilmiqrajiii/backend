@@ -3,7 +3,19 @@ const Kurikulum = require("../models/Kurikulum");
 exports.get = async (req, res) => {
   const { prodi, tahun } = req.params;
   const data = await Kurikulum.findOne({ prodi, tahun });
-  res.json(data || null);
+
+  if (!data) return res.json(null);
+
+  const base = `${req.protocol}://${req.get("host")}`;
+
+  res.json({
+    ...data.toObject(),
+    pdf: data.pdf ? base + data.pdf : "",
+    matkul: data.matkul.map((m) => ({
+      ...m.toObject(),
+      rps: m.rps ? base + m.rps : "",
+    })),
+  });
 };
 
 exports.save = async (req, res) => {
@@ -26,4 +38,19 @@ exports.save = async (req, res) => {
   );
 
   res.json(data);
+};
+
+exports.uploadRps = async (req, res) => {
+  const { prodi, index } = req.params;
+  const { tahun } = req.body;
+
+  if (!req.file) return res.status(400).json({ message: "RPS wajib" });
+
+  const data = await Kurikulum.findOne({ prodi, tahun });
+  if (!data) return res.status(404).json({ message: "Kurikulum tidak ada" });
+
+  data.matkul[index].rps = `/uploads/rps/${req.file.filename}`;
+  await data.save();
+
+  res.json({ rps: data.matkul[index].rps });
 };
