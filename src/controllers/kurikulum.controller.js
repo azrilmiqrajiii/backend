@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const Kurikulum = require("../models/Kurikulum");
 
 exports.get = async (req, res) => {
@@ -20,7 +22,9 @@ exports.get = async (req, res) => {
 
 exports.save = async (req, res) => {
   const { prodi } = req.params;
-  const { tahun, matkul } = req.body;
+  const { tahun, matkul, removePdf } = req.body;
+
+  const existing = await Kurikulum.findOne({ prodi, tahun: Number(tahun) });
 
   const payload = {
     prodi,
@@ -28,8 +32,15 @@ exports.save = async (req, res) => {
     matkul: JSON.parse(matkul),
   };
 
-  if (req.files?.pdf)
+  if (removePdf && existing?.pdf) {
+    const filePath = path.join(process.cwd(), existing.pdf);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    payload.pdf = "";
+  }
+
+  if (req.files?.pdf) {
     payload.pdf = `/uploads/kurikulum/${req.files.pdf[0].filename}`;
+  }
 
   const data = await Kurikulum.findOneAndUpdate(
     { prodi, tahun: payload.tahun },
