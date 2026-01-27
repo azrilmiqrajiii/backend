@@ -1,17 +1,14 @@
 const mongoose = require("mongoose");
 
-const matkulSchema = new mongoose.Schema(
-  {
-    semester: Number,
-    kode: String,
-    nama: String,
-    sksKuliah: Number,
-    sksSeminar: Number,
-    sksPraktikum: Number,
-    rps: String,
-  },
-  { _id: true },
-);
+const matkulSchema = new mongoose.Schema({
+  semester: String,
+  kode: String,
+  nama: String,
+  sksKuliah: { type: Boolean, default: false },
+  sksSeminar: { type: Boolean, default: false },
+  sksPraktikum: { type: Boolean, default: false },
+  rps: String,
+});
 
 const kurikulumSchema = new mongoose.Schema(
   {

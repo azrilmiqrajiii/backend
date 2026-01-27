@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: true,
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -35,5 +35,8 @@ app.use("/api/menus", menuRoutes);
 
 const kurikulumRoutes = require("./routes/kurikulum.routes");
 app.use("/api/kurikulum", kurikulumRoutes);
+
+const capaianRoutes = require("./routes/capaianPembelajaran.routes");
+app.use("/api/capaian-pembelajaran", capaianRoutes);
 
 module.exports = app;
