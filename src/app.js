@@ -39,4 +39,10 @@ app.use("/api/kurikulum", kurikulumRoutes);
 const capaianRoutes = require("./routes/capaianPembelajaran.routes");
 app.use("/api/capaian-pembelajaran", capaianRoutes);
 
+const prestasiMahasiswaRoutes = require("./routes/prestasiMahasiswa.routes");
+app.use("/api/prestasi-mahasiswa", prestasiMahasiswaRoutes);
+
+const waktuTungguLulusanRoutes = require("./routes/waktuTungguLulusan.routes");
+app.use("/api/waktu-tunggu-lulusan", waktuTungguLulusanRoutes);
+
 module.exports = app;
